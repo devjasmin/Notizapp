@@ -1,0 +1,115 @@
+@font-face {
+  font-family: "Airstrike";
+  src: url(./fonts/airstrike/airstrikechrome.ttf);
+}
+
+body {
+  margin: 0;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 400px 800px;
+}
+
+.sidebar {
+  width: 300px;
+  height: 80vh;
+  margin: 0.5rem;
+  padding: 2rem;
+  border-right: 1px solid black;
+}
+.main-content {
+  width: 600px;
+  height: 80vh;
+  margin: 0.5rem;
+  padding: 0.5rem;
+}
+
+#title-input {
+  width: 800px;
+  border: none;
+  font-size: 4rem;
+  font-family: "Airstrike";
+  outline: none;
+  padding: 0;
+  margin: 0;
+}
+
+.title-and-save {
+  width: 600px;
+  border-radius: 5px;
+  margin-right: 3rem;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  gap: 0.5rem;
+}
+
+#textarea {
+  width: 600px;
+  height: 80vh;
+  border: none;
+  font-size: 2.5rem;
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+  width: 300px;
+  height: 5rem;
+  margin: 0.5rem;
+  padding: 24px;
+  border-radius: 8px;
+  background-color: rgb(228, 0, 178);
+  font-size: 1.5rem;
+  color: white;
+}
+
+button:hover {
+  width: 300px;
+  height: 5rem;
+  margin: 0.5rem;
+  padding: 24px;
+  border-radius: 8px;
+  background-color: rgb(247, 115, 214);
+  font-size: 1.5rem;
+}
+
+.icon-btn.save {
+  background-image: url("./pictures/save.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 30px;
+}
+
+.icon-btn.delete {
+  background-image: url("./pictures/delete.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 30px;
+}
+
+.notes-list {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 2rem;
+}
+.card {
+  background-color: rgb(228, 0, 178);
+  height: 15vh;
+  width: 250px;
+  margin: 0.8rem;
+  padding: 1rem;
+  border-radius: 5px;
+}
+.card:hover {
+  background-color: rgb(247, 115, 214);
+  height: 15vh;
+  width: 250px;
+  margin: 0.8rem;
+  padding: 1rem;
+  border-radius: 5px;
+}
