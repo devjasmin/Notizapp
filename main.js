@@ -1,47 +1,65 @@
-const card = [
+const createButton = document.getElementById("newCard");
+const saveButton = document.getElementById("saveNote");
+const deleteButton = document.getElementById("deleteNote");
+const titleInput = document.getElementById("title-input");
+const textInput = document.getElementById("textarea");
+
+function newCard() {
+  console.log("neue Nachricht erstellt");
+}
+
+function saveNote() {
+  console.log("Nachricht gespeichert");
+}
+
+function deleteNote() {
+  console.log("Nachricht gelöscht!");
+}
+
+createButton.addEventListener("click", newCard);
+saveButton.addEventListener("click", saveNote);
+deleteButton.addEventListener("click", deleteNote);
+
+let card = [
   {
     title: "Überschrift",
     text: "Notiz",
-    id: "title-input",
     date: "new Date()",
     idNr: 1,
-
+  },
+  {
     title: "Überschrift1",
     text: "Notiz",
-    id: "title-input",
     date: "new Date()",
     idNr: 2,
-
+  },
+  {
     title: "Überschrift2",
     text: "Notiz",
-    id: "title-input",
     date: "new Date()",
     idNr: 3,
-
+  },
+  {
     title: "Überschrift3",
     text: "Notiz",
-    id: "title-input",
     date: "new Date()",
     idNr: 4,
   },
 ];
 
-localStorage.setItem("card-daten", JSON.stringify(card));
-
-const daten = JSON.parse(localStorage.getItem("card"));
-console.log(card);
-console.log(card.title);
-console.log(card.text);
-console.log(card.id);
-console.log(card.date);
-console.log(card.idNr);
-
 console.log(card.forEach((card) => console.log(card.idNr)));
 
-console.log(card.sort((itemA, itemB) => itemB.idNr - itemA.idNr));
+console.log(card.sort((itemA, itemB) => itemA.idNr - itemB.idNr));
 
 new Date().toLocaleDateString("de-DE", {
   day: "numeric",
   month: "long",
   year: "numeric",
 });
+
+//card.push(card);
+
+//im LocalStorage speichern
+localStorage.setItem("card-daten", JSON.stringify(card));
+
+const daten = JSON.parse(localStorage.getItem("card"));
