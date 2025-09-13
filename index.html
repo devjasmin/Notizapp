@@ -6,31 +6,16 @@
     <title>Notiz App</title>
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body>
+  <div>
     <div class="wrapper">
     <div class="sidebar">      
     <button id="newCard" class="create-notes">
       <span>Neue Notiz erstellen</span>
       </button>
-      <div class="notes-list">
-      <div class="card" data-id="1"> 
-      <div class="card-title"></div>
-      <div class ="card-content"></div>
-      <div class="card-date"></div>
-      </div>
-      <div class="card" data-id="2">
-        <div class="card-title"></div>
-      <div class ="card-content"></div>
-      <div class="card-date"></div>
-      </div>
-      <div class="card" data-id="3">
-        <div class="card-title"></div>
-      <div class ="card-content"></div>
-      <div class="card-date"></div>
+      <div class="notesList">
       </div>
       </div>
-       </div>
-       <div class="main-content">
+      <div class="main-content">
       <span id="note-id-store"></span>
     <div class="title-and-save">
     <input type="text" id="title-input" placeholder=" Überschrift eingeben..."</input>
@@ -38,6 +23,7 @@
     <button id="deleteNote" class="icon-btn delete"></button>
     </div>
     <textarea id="textarea" placeholder =" Bitte hier Notiz eingeben"></textarea></div>
+    
     </div>
     </div>
     <script src="main.js"></script>
