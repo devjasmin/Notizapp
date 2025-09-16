@@ -10,7 +10,6 @@ let selectedCard = null; // unbedingt ausserhalb, damit alle Funktionen darauf z
 function newCard() {
   titleInput.value = "";
   textInput.value = "";
-  console.log("neue Nachricht erstellt");
 }
 
 function saveNote() {
@@ -25,10 +24,10 @@ function saveNote() {
   }
 
   // aktuelles Datum erzeugen
-  let date = new Date();
-  let formattedDate = date.toLocaleDateString("de-DE", {
-    day: "numeric",
-    month: "long",
+  let today = new Date();
+  let formattedDate = today.toLocaleString("de-DE", {
+    day: "2-digit",
+    month: "2-digit",
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
@@ -36,14 +35,24 @@ function saveNote() {
 
   let card = document.createElement("div");
   card.classList.add("card");
-  card.setAttribute("data-id", new Date());
+  card.setAttribute("data-id", formattedDate);
 
   card.innerHTML = `
 <h2>${titleInput}</h2>
   <p>${textInput}</p> 
-  <p>${new Date()}</p>
+  <p>${formattedDate}</p>
 `;
   console.log("Notiz gespeichert:", { titleInput, textInput, formattedDate });
+
+  // im localStorage speichern
+  localStorage.setItem("Daten", JSON.stringify("titleInput, textarea"));
+
+  // im localStorage laden
+  // let gespeicherteDaten = localStorage.getItem("Daten");
+  // console.log(Daten);
+
+  // im localStorage anzeigen
+  // const newdate = JSON.parse(localStorage.getItem(gespeicherteDaten));
 
   notesList.appendChild(card);
 }
@@ -75,8 +84,3 @@ deleteButton.addEventListener("click", deleteNote);
 // console.log(card.forEach((card) => console.log(card.idNr)));
 
 // console.log(selectedCard.sort((itemA, itemB) => itemA.data - id - itemB.data - id));
-
-// im LocalStorage speichern
-// localStorage.setItem("card-daten", JSON.stringify(output));
-
-// const daten = JSON.parse(localStorage.getItem("card"));
