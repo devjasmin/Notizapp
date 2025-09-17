@@ -116,18 +116,3 @@ button:hover {
   padding: 1rem;
   border-radius: 5px;
 }
-
-.card-title {
-  color: black;
-  font-size: 1.5rem;
-}
-
-.card-content {
-  color: black;
-  font-size: 1rem;
-}
-
-.card-date {
-  color: black;
-  font-size: 0.5rem;
-}

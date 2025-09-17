@@ -51,7 +51,7 @@ function saveNote() {
   // let gespeicherteDaten = localStorage.getItem("Daten");
   // console.log(Daten);
 
-  // im localStorage anzeigen
+  //im localStorage anzeigen
   // const newdate = JSON.parse(localStorage.getItem(gespeicherteDaten));
 
   notesList.appendChild(card);
