@@ -5,6 +5,7 @@
 
 body {
   margin: 0;
+  padding: 0;
 }
 
 .wrapper {
@@ -29,6 +30,7 @@ body {
 
 #title-input {
   width: 800px;
+  height: 5rem;
   border: none;
   font-size: 4rem;
   font-family: "MonicaAngeles";
@@ -51,7 +53,7 @@ body {
   width: 600px;
   height: 80vh;
   border: none;
-  font-size: 2.5rem;
+  font-size: 2rem;
   outline: none;
 }
 

@@ -1,15 +1,73 @@
 let createButton = document.getElementById("newCard");
 let saveButton = document.getElementById("saveNote");
 let deleteButton = document.getElementById("deleteNote");
-let titleInput = document.getElementById("title-input");
-let textInput = document.getElementById("textarea");
-const notesList = document.querySelector(".notesList"); // passt zu deinem HTML
+let titleInputEl = document.getElementById("title-input");
+let textInputEl = document.getElementById("textarea");
+const notesList = document.querySelector(".notesList"); // Container für Karten
 
+let cards = []; // Array von {id, title, text, date}
 let selectedCard = null; // unbedingt ausserhalb, damit alle Funktionen darauf zugreifen können
 
+// --- Storage-Hilfen ---
+function loadFromStorage() {
+  const raw = localStorage.getItem("Daten");
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      return parsed; // korrektes Array
+    }
+    // Falls z.B. nur ein Objekt drin liegt
+    if (parsed && typeof parsed === "object") {
+      return [parsed];
+    }
+    return [];
+  } catch (e) {
+    console.error("Fehler beim Parsen:", e);
+    return [];
+  }
+}
+
+// im localStorage speichern -> hier muss bei JSON.stringify ein Array rein
+function saveToStorage(arr) {
+  localStorage.setItem("Daten", JSON.stringify(arr));
+}
+
+function renderNotes() {
+  notesList.innerHTML = ""; // vorher aufräumen
+  cards = loadFromStorage(); // globale cards aktualisieren
+
+  cards.forEach((note) => {
+    const card = document.createElement("div");
+    card.classList.add("card");
+    card.setAttribute("data-id", note.id);
+
+    const titleEl = document.createElement("h2");
+    titleEl.textContent = note.title;
+
+    const textEl = document.createElement("p");
+    textEl.textContent = note.text;
+
+    const dateEl = document.createElement("p");
+    dateEl.textContent = note.date;
+
+    // Elemente in die Karte hängen
+    card.appendChild(titleEl);
+    card.appendChild(textEl);
+    card.appendChild(dateEl);
+
+    // Karte in den Container hängen
+    notesList.appendChild(card);
+  });
+}
+
 function newCard() {
-  titleInput.value = "";
-  textInput.value = "";
+  titleInputEl.value = "";
+  textInputEl.value = "";
+  if (selectedCard) {
+    selectedCard.classList.remove("selected");
+    selectedCard = null;
+  }
 }
 
 function saveNote() {
@@ -31,30 +89,47 @@ function saveNote() {
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
+    second: "2-digit",
   });
 
-  let card = document.createElement("div");
-  card.classList.add("card");
-  card.setAttribute("data-id", formattedDate);
+  // neues Notiz-Objekt
+  const noteObj = {
+    id: Date.now().toString(),
+    title: titleInput,
+    text: textInput,
+    date: formattedDate,
+  };
 
-  card.innerHTML = `
-<h2>${titleInput}</h2>
-  <p>${textInput}</p> 
-  <p>${formattedDate}</p>
-`;
-  console.log("Notiz gespeichert:", { titleInput, textInput, formattedDate });
+  // bestehendes Array einlesen, neues Element pushen, speichern
+  const existing = loadFromStorage();
+  existing.push(noteObj);
+  saveToStorage(existing);
 
-  // im localStorage speichern
-  localStorage.setItem("Daten", JSON.stringify("titleInput, textarea"));
+  // UI neu rendern
+  notesList.innerHTML = "";
+  renderNotes();
+  console.log("Notiz gespeichert:", noteObj);
 
-  // im localStorage laden
-  // let gespeicherteDaten = localStorage.getItem("Daten");
-  // console.log(Daten);
+  // Formular zurücksetzen (optional)
+  newCard();
+}
 
-  //im localStorage anzeigen
-  // const newdate = JSON.parse(localStorage.getItem(gespeicherteDaten));
+// globaler Delete-Button entfernt ausgewählte Karte
+function deleteNote() {
+  if (!selectedCard) {
+    alert("Bitte zuerst eine Karte anklicken.");
+    return;
+  }
+  const idToRemove = selectedCard.getAttribute("data-id");
 
-  notesList.appendChild(card);
+  // Element aus DOM entfernen
+  selectedCard.remove();
+  selectedCard = null;
+
+  // aus storage entfernen
+  cards = loadFromStorage().filter((c) => c.id !== idToRemove);
+  saveToStorage(cards);
+  renderNotes();
 }
 
 // Klick auf eine Karte => Auswahl toggeln
@@ -65,22 +140,22 @@ notesList.addEventListener("click", (e) => {
   if (selectedCard) selectedCard.classList.remove("selected");
   clicked.classList.add("selected");
   selectedCard = clicked;
-});
 
-// globaler Delete-Button entfernt ausgewählte Karte
-function deleteNote() {
-  if (!selectedCard) {
-    alert("Bitte zuerst eine Karte anklicken (auswählen).");
-    return;
+  // Formular mit Werten füllen (optional)
+  const id = clicked.getAttribute("data-id");
+  const found = cards.find((c) => c.id === id);
+  if (found) {
+    titleInputEl.value = found.title;
+    textInputEl.value = found.text;
   }
-  selectedCard.remove();
-  selectedCard = null;
-}
+});
 
 createButton.addEventListener("click", newCard);
 saveButton.addEventListener("click", saveNote);
 deleteButton.addEventListener("click", deleteNote);
 
-// console.log(card.forEach((card) => console.log(card.idNr)));
+// Beim Start vorhandene Notizen rendern
+notesList.innerHTML = "";
+renderNotes();
 
-// console.log(selectedCard.sort((itemA, itemB) => itemA.data - id - itemB.data - id));
+// console.log(selectedCard.sort((itemA, itemB) => itemA.data-id - itemB.data - id));
