@@ -75,7 +75,7 @@ function saveNote() {
   let titleInput = document.getElementById("title-input").value;
   let textInput = document.getElementById("textarea").value;
 
-  if (!titleInput && !textInput) {
+  if (!titleInput || !textInput) {
     // nichts zum Speichern vorhanden
     alert("Bitte Überschrift und Text eingeben.");
     return;
@@ -100,6 +100,11 @@ function saveNote() {
     date: formattedDate,
   };
 
+  let id = undefined;
+
+  //const sortedNotes = cards.sort((itemA, itemB) => itemA.id - itemB.id);
+  // console.log(sortedNotes);
+
   // bestehendes Array einlesen, neues Element pushen, speichern
   const existing = loadFromStorage();
   existing.push(noteObj);
@@ -109,9 +114,6 @@ function saveNote() {
   notesList.innerHTML = "";
   renderNotes();
   console.log("Notiz gespeichert:", noteObj);
-
-  // Formular zurücksetzen (optional)
-  newCard();
 }
 
 // globaler Delete-Button entfernt ausgewählte Karte
@@ -120,6 +122,7 @@ function deleteNote() {
     alert("Bitte zuerst eine Karte anklicken.");
     return;
   }
+
   const idToRemove = selectedCard.getAttribute("data-id");
 
   // Element aus DOM entfernen
@@ -132,22 +135,29 @@ function deleteNote() {
   renderNotes();
 }
 
-// Klick auf eine Karte => Auswahl toggeln
+// Klick auf eine Karte => Auswählen und bearbeiten
 notesList.addEventListener("click", (e) => {
   const clicked = e.target.closest(".card");
   if (!clicked) return;
 
-  if (selectedCard) selectedCard.classList.remove("selected");
-  clicked.classList.add("selected");
-  selectedCard = clicked;
+  // vorher ausgewählte Karte "deselecten" und Änderungen speichern
+  if (selectedCard) {
+    selectedCard.classList.remove("selected");
+    selectedCard.removeAttribute("contenteditable");
 
-  // Formular mit Werten füllen (optional)
-  const id = clicked.getAttribute("data-id");
-  const found = cards.find((c) => c.id === id);
-  if (found) {
-    titleInputEl.value = found.title;
-    textInputEl.value = found.text;
+    // Änderungen zurück ins Array schreiben
+    const id = clicked.getAttribute("data-id");
+    const found = cards.find((c) => c.id === id);
+    if (found) {
+      titleInputEl.value = found.title;
+      textInputEl.value = found.text;
+    }
   }
+  // Neue Karte auswählbar machen
+  clicked.classList.add("selected");
+  clicked.setAttribute("contenteditable", "true");
+  clicked.focus();
+  selectedCard = clicked;
 });
 
 createButton.addEventListener("click", newCard);
@@ -157,5 +167,3 @@ deleteButton.addEventListener("click", deleteNote);
 // Beim Start vorhandene Notizen rendern
 notesList.innerHTML = "";
 renderNotes();
-
-// console.log(selectedCard.sort((itemA, itemB) => itemA.data-id - itemB.data - id));
