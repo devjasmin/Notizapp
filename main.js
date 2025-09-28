@@ -64,13 +64,9 @@ function renderNotes() {
 function newCard() {
   titleInputEl.value = "";
   textInputEl.value = "";
-  if (selectedCard) {
-    selectedCard.classList.remove("selected");
-    selectedCard = null;
-  }
 }
 
-function saveNote() {
+function saveNote(title, text, id) {
   // Werte auslesen
   let titleInput = document.getElementById("title-input").value;
   let textInput = document.getElementById("textarea").value;
@@ -92,6 +88,19 @@ function saveNote() {
     second: "2-digit",
   });
 
+  // bestehendes Array einlesen, gibt es die Karte bereits? wenn nein, pushen. wenn ja updaten, dann speichern
+  const existing = loadFromStorage();
+
+  if (selectedCard) {
+    const idToUpdate = selectedCard.getAttribute("data-id");
+    const idx = existing.findIndex((n) => n.id === idToUpdate);
+    if (idx !== -1) {
+      existing[idx].title = titleInputEl;
+      existing[idx].txt = textInputEl;
+      saveToStorage(existing);
+    }
+  }
+
   // neues Notiz-Objekt
   const noteObj = {
     id: Date.now().toString(),
@@ -100,13 +109,6 @@ function saveNote() {
     date: formattedDate,
   };
 
-  let id = undefined;
-
-  //const sortedNotes = cards.sort((itemA, itemB) => itemA.id - itemB.id);
-  // console.log(sortedNotes);
-
-  // bestehendes Array einlesen, neues Element pushen, speichern
-  const existing = loadFromStorage();
   existing.push(noteObj);
   saveToStorage(existing);
 
@@ -129,7 +131,7 @@ function deleteNote() {
   selectedCard.remove();
   selectedCard = null;
 
-  // aus storage entfernen
+  // aus Storage entfernen
   cards = loadFromStorage().filter((c) => c.id !== idToRemove);
   saveToStorage(cards);
   renderNotes();
