@@ -102,7 +102,7 @@ button:hover {
 }
 .card {
   background-color: rgb(228, 0, 178);
-  height: 15vh;
+  height: 25vh;
   width: 250px;
   margin: 0.8rem;
   padding: 1rem;
@@ -112,7 +112,7 @@ button:hover {
 }
 .card:hover {
   background-color: rgb(247, 115, 214);
-  height: 15vh;
+  height: 25vh;
   width: 250px;
   margin: 0.8rem;
   padding: 1rem;

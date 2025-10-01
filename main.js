@@ -12,30 +12,36 @@ let selectedCard = null; // unbedingt ausserhalb, damit alle Funktionen darauf z
 function loadFromStorage() {
   const raw = localStorage.getItem("Daten");
   if (!raw) return [];
+
   try {
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed)) {
       return parsed; // korrektes Array
     }
-    // Falls z.B. nur ein Objekt drin liegt
     if (parsed && typeof parsed === "object") {
-      return [parsed];
+      return [parsed]; // einzelnes Objekt in Array packen
     }
-    return [];
+    return []; // alles andere
   } catch (e) {
     console.error("Fehler beim Parsen:", e);
     return [];
   }
 }
 
+console.log("Gelesene Daten aus Storage:", loadFromStorage()); // kein Array vorhanden
+
 // im localStorage speichern -> hier muss bei JSON.stringify ein Array rein
 function saveToStorage(arr) {
   localStorage.setItem("Daten", JSON.stringify(arr));
 }
 
+console.log("Gespeicherte Daten im Storage:", localStorage.getItem("Daten"));
+
 function renderNotes() {
   notesList.innerHTML = ""; // vorher aufräumen
-  cards = loadFromStorage(); // globale cards aktualisieren
+  cards = loadFromStorage("Daten"); // globale cards aktualisieren
+
+  console.log("zu rendernde Karten:", cards);
 
   cards.forEach((note) => {
     const card = document.createElement("div");
@@ -77,47 +83,50 @@ function saveNote(title, text, id) {
     return;
   }
 
-  // aktuelles Datum erzeugen
-  let today = new Date();
-  let formattedDate = today.toLocaleString("de-DE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
+  let noteObj;
+  let existing = loadFromStorage(); // aktuelles Array aus Storage holen
 
-  // bestehendes Array einlesen, gibt es die Karte bereits? wenn nein, pushen. wenn ja updaten, dann speichern
-  const existing = loadFromStorage();
-
+  // wenn eine Karte ausgewählt ist, diese updaten, sonst neue Karte erstellen
   if (selectedCard) {
     const idToUpdate = selectedCard.getAttribute("data-id");
     const idx = existing.findIndex((n) => n.id === idToUpdate);
     if (idx !== -1) {
-      existing[idx].title = titleInputEl;
-      existing[idx].txt = textInputEl;
-      saveToStorage(existing);
+      existing[idx].title = titleInput;
+      existing[idx].text = textInput;
+      existing[idx].date = new Date().toLocaleString("de-DE", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
     }
+  } else {
+    noteObj = {
+      id: Date.now().toString(),
+      title: titleInput,
+      text: textInput,
+      date: new Date().toLocaleString("de-DE", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      }),
+    };
+    existing.push(noteObj);
   }
-
-  // neues Notiz-Objekt
-  const noteObj = {
-    id: Date.now().toString(),
-    title: titleInput,
-    text: textInput,
-    date: formattedDate,
-  };
-
-  existing.push(noteObj);
   saveToStorage(existing);
+  cards = existing; // globale Variable updaten
+  renderNotes();
 
   // UI neu rendern
   notesList.innerHTML = "";
   renderNotes();
   console.log("Notiz gespeichert:", noteObj);
 }
-
 // globaler Delete-Button entfernt ausgewählte Karte
 function deleteNote() {
   if (!selectedCard) {
