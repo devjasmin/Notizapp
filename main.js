@@ -35,13 +35,15 @@ function saveToStorage(arr) {
   localStorage.setItem("Daten", JSON.stringify(arr));
 }
 
-console.log("Gespeicherte Daten im Storage:", localStorage.getItem("Daten"));
+// console.log("Gespeicherte Daten im Storage:", localStorage.getItem("Daten"));
 
 function renderNotes() {
   notesList.innerHTML = ""; // vorher aufräumen
-  cards = loadFromStorage("Daten"); // globale cards aktualisieren
+  // cards = loadFromStorage("Daten"); // globale cards aktualisieren
 
-  console.log("zu rendernde Karten:", cards);
+  // console.log("zu rendernde Karten:", cards);
+
+  cards.sort((a, b) => b.timestamp - a.timestamp); // nach Zeitstempel sortieren
 
   cards.forEach((note) => {
     const card = document.createElement("div");
@@ -93,20 +95,26 @@ function saveNote(title, text, id) {
     if (idx !== -1) {
       existing[idx].title = titleInput;
       existing[idx].text = textInput;
-      existing[idx].date = new Date().toLocaleString("de-DE", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      });
+      existing[idx].timestamp = Date.now();
+      existing[idx].date = new Date(existing[idx].timestamp).toLocaleString(
+        "de-DE",
+        {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        }
+      );
     }
+    cards.sort((a, b) => b.timestamp - a.timestamp); // nach Zeitstempel sortieren
   } else {
     noteObj = {
       id: Date.now().toString(),
       title: titleInput,
       text: textInput,
+      timestamp: Date.now(),
       date: new Date().toLocaleString("de-DE", {
         day: "2-digit",
         month: "2-digit",
@@ -118,6 +126,7 @@ function saveNote(title, text, id) {
     };
     existing.push(noteObj);
   }
+
   saveToStorage(existing);
   cards = existing; // globale Variable updaten
   renderNotes();
