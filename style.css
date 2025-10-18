@@ -3,14 +3,26 @@
   src: url(./fonts/monica-angeles/MonicaAngeles.otf);
 }
 
+:root {
+  --font-family: "Monica Angeles", sans-serif;
+  --background-color: #ddd;
+  --text-color: #ddd;
+  --button-color: rgb(87, 38, 223);
+  --button-hover-color: rgb(123, 91, 250);
+  --card-color: rgb(87, 38, 223);
+  --card-hover-color: rgb(123, 91, 250);
+}
+
 body {
   margin: 0;
   padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 .wrapper {
   display: grid;
-  grid-template-columns: 400px 800px;
+  grid-template-columns: 1fr 2fr;
 }
 
 .sidebar {
@@ -19,7 +31,8 @@ body {
   margin: 0.5rem;
   padding: 2rem;
   border-right: 1px solid black;
-  overflow-y: scroll;
+  overflow-y: scroll auto;
+  min-width: 200px;
 }
 .main-content {
   width: 600px;
@@ -33,7 +46,7 @@ body {
   height: 5rem;
   border: none;
   font-size: 4rem;
-  font-family: "MonicaAngeles";
+  font-family: var (--font-family);
   outline: none;
   padding: 0;
   margin: 0;
@@ -50,7 +63,7 @@ body {
 }
 
 #textarea {
-  width: 600px;
+  width: 800px;
   height: 80vh;
   border: none;
   font-size: 2rem;
@@ -64,7 +77,7 @@ button {
   margin: 0.5rem;
   padding: 24px;
   border-radius: 8px;
-  background-color: rgb(228, 0, 178);
+  background-color: var(--button-color);
   font-size: 1.5rem;
   color: white;
 }
@@ -75,22 +88,27 @@ button:hover {
   margin: 0.5rem;
   padding: 24px;
   border-radius: 8px;
-  background-color: rgb(247, 115, 214);
+  background-color: var(--button-hover-color);
   font-size: 1.5rem;
 }
 
 .icon-btn.save {
-  background-image: url(./pictures/save.png);
+  background-image: url("./save.svg");
   background-repeat: no-repeat;
   background-position: center;
   padding: 30px;
+  width: 60px;
+  height: 60px;
+  display: inline-block;
 }
 
 .icon-btn.delete {
-  background-image: url("./pictures/delete.png");
+  background-image: url("./delete.svg");
   background-repeat: no-repeat;
   background-position: center;
   padding: 30px;
+  width: 60px;
+  height: 60px;
 }
 
 .notes-list {
@@ -101,7 +119,7 @@ button:hover {
   margin-top: 2rem;
 }
 .card {
-  background-color: rgb(228, 0, 178);
+  background-color: var(--card-color);
   height: 25vh;
   width: 250px;
   margin: 0.8rem;
@@ -109,9 +127,10 @@ button:hover {
   border-radius: 5px;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
+  font-size: 20px;
 }
 .card:hover {
-  background-color: rgb(247, 115, 214);
+  background-color: var(--card-hover-color);
   height: 25vh;
   width: 250px;
   margin: 0.8rem;
