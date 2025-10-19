@@ -5,12 +5,12 @@
 
 :root {
   --font-family: "MonicaAngeles", sans-serif;
-  --background-color: #ddd;
-  --text-color: #ddd;
-  --button-color: rgb(80, 185, 91);
-  --button-hover-color: rgb(33, 145, 11);
-  --card-color: rgb(80, 185, 91);
-  --card-hover-color: rgb(33, 145, 11);
+  --background-color: #e95e5e59;
+  --text-color: black;
+  --button-color: rgb(33, 145, 11);
+  --button-hover-color: rgb(80, 185, 91);
+  --card-color: rgb(33, 145, 11);
+  --card-hover-color: rgb(80, 185, 91);
 }
 
 body {
@@ -44,7 +44,7 @@ body {
   width: 800px;
   height: 6rem;
   border: none;
-  font-size: 4rem;
+  font-size: 5rem;
   font-family: var(--font-family);
   outline: none;
   padding: 0;
@@ -65,7 +65,8 @@ body {
   width: 622px;
   height: 80vh;
   border: none;
-  font-size: 2rem;
+  font-family: var(--font-family);
+  font-size: 3rem;
   outline: none;
 }
 
@@ -120,7 +121,7 @@ button:hover {
 }
 .card {
   background-color: var(--card-color);
-  height: 25vh;
+  height: 150px;
   width: 250px;
   margin: 0.8rem;
   padding: 1rem;
@@ -131,7 +132,7 @@ button:hover {
 }
 .card:hover {
   background-color: var(--card-hover-color);
-  height: 25vh;
+  height: 150px;
   width: 250px;
   margin: 0.8rem;
   padding: 1rem;
