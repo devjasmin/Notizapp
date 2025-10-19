@@ -1,8 +1,8 @@
-let createButton = document.getElementById("newCard");
-let saveButton = document.getElementById("saveNote");
-let deleteButton = document.getElementById("deleteNote");
-let titleInputEl = document.getElementById("title-input");
-let textInputEl = document.getElementById("textarea");
+const createButton = document.getElementById("newCard");
+const saveButton = document.getElementById("saveNote");
+const deleteButton = document.getElementById("deleteNote");
+const titleInputEl = document.getElementById("title-input");
+const textInputEl = document.getElementById("textarea");
 const notesList = document.querySelector(".notesList"); // Container für Karten
 
 let cards = []; // Array von {id, title, text, date}
@@ -10,40 +10,19 @@ let selectedCard = null; // unbedingt ausserhalb, damit alle Funktionen darauf z
 
 // --- Storage-Hilfen ---
 function loadFromStorage() {
-  const raw = localStorage.getItem("Daten");
-  if (!raw) return [];
-
-  try {
-    const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed)) {
-      return parsed; // korrektes Array
-    }
-    if (parsed && typeof parsed === "object") {
-      return [parsed]; // einzelnes Objekt in Array packen
-    }
-    return []; // alles andere
-  } catch (e) {
-    console.error("Fehler beim Parsen:", e);
-    return [];
-  }
+  return JSON.parse(localStorage.getItem("Daten") || "[]");
 }
-
-console.log("Gelesene Daten aus Storage:", loadFromStorage()); // kein Array vorhanden
 
 // im localStorage speichern -> hier muss bei JSON.stringify ein Array rein
 function saveToStorage(arr) {
   localStorage.setItem("Daten", JSON.stringify(arr));
 }
 
-// console.log("Gespeicherte Daten im Storage:", localStorage.getItem("Daten"));
-
 function renderNotes() {
   notesList.innerHTML = ""; // vorher aufräumen
-  // cards = loadFromStorage("Daten"); // globale cards aktualisieren
+  cards = loadFromStorage("Daten"); // globale cards aktualisieren
 
-  // console.log("zu rendernde Karten:", cards);
-
-  cards.sort((a, b) => b.timestamp - a.timestamp); // nach Zeitstempel sortieren
+  cards.sort((a, b) => b.timestamp - a.timestamp); // aktuellster Zeitstempel zu oberst
 
   cards.forEach((note) => {
     const card = document.createElement("div");
@@ -59,12 +38,10 @@ function renderNotes() {
     const dateEl = document.createElement("p");
     dateEl.textContent = note.date;
 
-    // Elemente in die Karte hängen
     card.appendChild(titleEl);
     card.appendChild(textEl);
     card.appendChild(dateEl);
 
-    // Karte in den Container hängen
     notesList.appendChild(card);
   });
 }
@@ -75,13 +52,12 @@ function newCard() {
 }
 
 function saveNote(title, text, id) {
-  // Werte auslesen
   let titleInput = document.getElementById("title-input").value;
   let textInput = document.getElementById("textarea").value;
 
   if (!titleInput || !textInput) {
     // nichts zum Speichern vorhanden
-    alert("Bitte Überschrift und Text eingeben.");
+    alert("Bitte Überschrift und Text eingeben");
     return;
   }
 
@@ -128,18 +104,17 @@ function saveNote(title, text, id) {
   }
 
   saveToStorage(existing);
-  cards = existing; // globale Variable updaten
-  renderNotes();
+  cards = existing;
 
   // UI neu rendern
   notesList.innerHTML = "";
   renderNotes();
-  console.log("Notiz gespeichert:", noteObj);
 }
+
 // globaler Delete-Button entfernt ausgewählte Karte
 function deleteNote() {
   if (!selectedCard) {
-    alert("Bitte zuerst eine Karte anklicken.");
+    alert("Markiere bitte zuerst eine Karte");
     return;
   }
 
