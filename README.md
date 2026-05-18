@@ -12,4 +12,4 @@ TechStack
 
 
 Live-Demo:
-https://github.com/devjasmin/Notizapp
+https://devjasmin.github.io/Notizapp/
